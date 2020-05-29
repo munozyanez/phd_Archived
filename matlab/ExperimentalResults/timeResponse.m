@@ -13,7 +13,7 @@ plot(t,motor);
 ylabel(' Position (rad)          Inclination (deg)      ');
 xlabel('time (s)');
 legend('Neck inclination', 'Motor position','Location','best');
-saveas(fig,'fig/timeResponse','epsc');
+saveas(fig,'fig/avgtimeResponse','epsc');
 
 
 

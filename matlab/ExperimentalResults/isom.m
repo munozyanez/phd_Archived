@@ -1,52 +1,23 @@
 clear;close all;s=tf('s');
-
-
+dts=0.02;
+z=tf('z',dts);
 
 
 %This file tunes a fractional controller based on the following:
 %%%%%%%%%%%% controller specification
-% wsp=0.5; %new crossover frequency
-% pm=50; %new phase margin
-% Ts=0.05;
-% caso=1;
+wgc=3;pm=50;Ts=dts;caso=1; %
+dsys=0.07884/ ( z^2 - 1.198 *z + 0.1981);
 %%%%%%%%%%%
-%wn2=1/0.1508;xi2wn=0.2633/0.1508;%Cycab con bode igual que Carlos
-%wsp=0.5;pm=40;Ts=0.05;caso=1; %cycab
-wn2=4.51;xi2wn=3.717; %accord
-wsp=1;pm=90;Ts=0.05;caso=1; %accord
-%wsp=3;pm=70;Ts=0.05;caso=2; %accord
-%%%%%%%%%%%
-
-h=0.6;
-H=1+h*s;
-systf=wn2/(s^2 + xi2wn*s + wn2);
-
 
 %jw array
-r0=1;%radius (decades) and center of plots
-N = 1000;%precission bigger better
-Nm=round(N/2);
-w=logspace(-r0+log10(wsp),r0+log10(wsp),(N));
+r0=2; N = 1000; Nm=fix(N/2);
+w=logspace(-r0+log10(wgc),r0+log10(wgc),(N));
 jw = 1i*w;
+z_=exp(dts*jw);
 
 
-ol=minreal( (systf/(1-systf))*(1/s) );%positive feedback, integrate: Gpfb
-lo=minreal( H*(systf/(1-systf))*(1/s) );%positive feedback, integrate, and introduce H: Gpfb*H
-
-if caso==1
-    system=ol;
-    dsys=system;%*H;
-
-else
-    system=lo;
-    dsys=system;
-    %Multiply the feedback by H and result is robust. Why?
-end
-
-
-sys = exp(-dsys.InputDelay*jw).*polyval(dsys.Numerator{1},jw)./polyval(dsys.Denominator{1},jw);
+sys = exp(-dsys.InputDelay*z_).*polyval(dsys.Numerator{1},z_)./polyval(dsys.Denominator{1},z_);
 figure;cbode(sys,w);
-Hjw = exp(-H.InputDelay*jw).*polyval(H.Numerator{1},jw)./polyval(H.Denominator{1},jw);
 
 
 
@@ -56,11 +27,8 @@ dm=1; %width of array positions to include in slope calculation
 ps = mod(angle(sys(Nm))*180/pi, -360);
 m= - ( angle(sys(Nm+dm))-angle(sys(Nm-dm)) ) / ( log10(w(Nm+dm))-log10(w(Nm-dm)) );
 
-
-ps=-53;
-m=-60;
-
-
+ps=-95
+m=14*pi/180
 %find required controller phi
 phi=-180+pm-ps; %phase required at new frequency
 % if (ps>0)
@@ -70,21 +38,12 @@ phi=-180+pm-ps; %phase required at new frequency
 % end
 
 
-% %correct the slope to counteract H slope (adds to closed loop system)
-% dm=10; %width of array positions to include in slope calculation
-% ph=angle(Hjw(Nm))*180/pi;
-% mh= ( angle(Hjw(Nm+dm))-angle(Hjw(Nm-dm)) ) / ( log10(w(Nm+dm))-log10(w(Nm-dm)) );
-% m=m-mh;
-% phi=phi-ph;
-% 
-% disp(phi)
-
 
 tgp=tan(phi*pi/180);
 
 %find exponent
 ed=0.01:0.01:2;
-% ed=-ed;
+ed=-ed;%for negative exponents
 ms=zeros(size(ed));
 a=ed(1)*pi/2;ms(1)=log(10)*ed(1)*(1-tgp/tan(a))*0.5/csc(2*phi*pi/180); %(tgp+1/tgp);
 for i=2:size(ed,2)
@@ -102,11 +61,12 @@ for i=2:size(ed,2)
 end
 
 m*180/pi
+ps
 phi
 
 alpha=ed(im);
 tx=1/(tgp/(sin(a)-tgp*cos(a)));
-taua=1/(tx*wsp^alpha);
+taua=1/(tx*wgc^alpha);
 
 one=ones(1,N);
 con=(one+taua*jw.^alpha);
@@ -122,8 +82,7 @@ kp_ka_alpha=[kp ka alpha]
 con=k*(1+taua*jw.^alpha);
 cs=sys.*con;
 
-pldata =cs;%./(1+cs);
-%figure;cbode(pldata,w);
+figure;cbode(cs,w);
 %figure; step(ol/((lo+1)),20);
 %figure; step(ol/(lo+1),5);
 %SaveCurPlotUnitsTsize(5,"sysStep","time (s)","Postion (m)");
@@ -148,22 +107,21 @@ else
 end
 
 warning ('off','all');
-[Cn, Cd]=invfreqs(con,w,5+orderadd,5,weights,100);
+[Cn, Cd]=invfreqs(con,w,4+orderadd,4,weights,100);
 warning ('on','all');
-fPD=(tf(Cn,Cd));
-
-if (caso==1)
-    C=fPD/H;
-    %fig=figure;bode(C*system*H,{wsp/10 wsp*10});grid on;
-    %saveas(fig,'Loop Approx Bode','epsc');
-else
-    C=fPD;
-    %fig=figure;bode(C*system,{wsp/10 wsp*10});grid on;
-    %saveas(fig,'Loop Approx Bode','epsc');
-end
-%figure;bode(fPD);
+fPD=minreal(tf(Cn,Cd));
 
 
+C=c2d(fPD,dts);
+
+fig=figure;hold on;
+bode(C*dsys,w);
+ylim([-120-90 -120+45])
+grid on;
+saveas(fig,'fig/avgLoopBode','epsc');
+
+% Cz_ = polyval(C.Numerator{1},z_)./polyval(C.Denominator{1},z_);
+% cbode(Cz_,w);
 
 % Cz=c2d(C,dts,'tustin');
 % Lz=c2d(minreal(lo),dts,'tustin');
@@ -231,22 +189,22 @@ dg=0.2;ng=2;
 
 
 fig=figure;hold on;
-tstep=20/sqrt(wsp);
+tstep=20/sqrt(wgc);
 % t=0:Ts:tstep;
 % lsim(H,ones(size(t)),t)
 %dg=0.2;ng=3;
 l1=[];
 for g=1:dg:1+dg*ng
-    step(H*feedback(C*g*ol,H));%,tstep);
+    step(feedback(C*dsys*g,1),tstep);
     l1=[l1; ['loop gain * ' num2str(g,'%.2f')]];
-    step(H*feedback(C*ol/g,H));%,tstep);
+    step(feedback(C*dsys/g,1),tstep);
     l1=[l1; ['loop gain / ' num2str(g,'%.2f')]];
 
 end
 grid on;
 Leg=legend(l1);
 
-%saveas(fig,'timeResps','epsc');
+saveas(fig,'fig/avgtimeResps','epsc');
 
 
 
@@ -262,7 +220,6 @@ phase = mod(angle(cfresp)*180/pi, -360);
 
 Nc = round(size(cfresp,2)/2);
 ycenter = mod(angle( cfresp(Nc) )*180/pi, -360);
-
 % Plot
 subplot(2,1,1)
 semilogx(freq,m);

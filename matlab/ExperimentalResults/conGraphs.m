@@ -1,4 +1,5 @@
-data=csvread("../data/final/adacon600.csv")
+clear; close all;
+data=csvread("data/con000.csv")
 t=data(:,1);
 kp=data(:,2);
 kv=data(:,3);
