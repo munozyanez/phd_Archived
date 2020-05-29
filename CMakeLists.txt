@@ -1,4 +1,4 @@
-project(papers)
+project(phd)
 
 cmake_minimum_required(VERSION 2.8)
 
