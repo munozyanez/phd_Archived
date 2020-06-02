@@ -4,8 +4,8 @@ dts=0.02;
 z=tf('z',0.02);
 s=tf('s');
 
-datan=csvread("data/sysnum000.csv");
-datad=csvread("data/sysden000.csv");
+datan=csvread("data/frasysnum200.csv");
+datad=csvread("data/frasysden200.csv");
 
 N=size(datan,2);
 M=size(datad,2);

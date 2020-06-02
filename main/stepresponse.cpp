@@ -32,11 +32,11 @@ int main (){
 
     //    sleep(4); //wait for sensor
 
-    ofstream sysdatanum("/home/humasoft/Escritorio/intsysnum000.csv",std::ofstream::out);
-    ofstream sysdataden("/home/humasoft/Escritorio/intsysden000.csv",std::ofstream::out);
-    ofstream condata("/home/humasoft/Escritorio/intcon000.csv",std::ofstream::out);
-    ofstream sysdatamp("/home/humasoft/Escritorio/isensor000response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/600stepresponse.csv",std::ofstream::out);
+    ofstream sysdatanum("/home/humasoft/Escritorio/frasysnum600.csv",std::ofstream::out);
+    ofstream sysdataden("/home/humasoft/Escritorio/frasysden600.csv",std::ofstream::out);
+    ofstream condata("/home/humasoft/Escritorio/fracon600.csv",std::ofstream::out);
+    ofstream sysdatamp("/home/humasoft/Escritorio/frasensor600response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/fra600stepresponse.csv",std::ofstream::out);
 
 
     //Samplinfg time
@@ -142,7 +142,7 @@ int main (){
     {
 
 
-        psr=+0;//.2*((rand() % 10)-5); //new pseudorandom data
+        psr=+0.1*((rand() % 10)-5); //new pseudorandom data
 
         //    incli=incli+psr;
         //    orien=0;
