@@ -32,11 +32,11 @@ int main (){
 
     //    sleep(4); //wait for sensor
 
-    ofstream sysdatanum("/home/humasoft/Escritorio/sysnum000.csv",std::ofstream::out);
-    ofstream sysdataden("/home/humasoft/Escritorio/sysden000.csv",std::ofstream::out);
-    ofstream condata("/home/humasoft/Escritorio/con000.csv",std::ofstream::out);
-    ofstream sysdatamp("/home/humasoft/Escritorio/sensor000response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/000response.csv",std::ofstream::out);
+    ofstream sysdatanum("/home/humasoft/Escritorio/idsysnum000.csv",std::ofstream::out);
+    ofstream sysdataden("/home/humasoft/Escritorio/idsysden000.csv",std::ofstream::out);
+    ofstream condata("/home/humasoft/Escritorio/idcon000.csv",std::ofstream::out);
+    ofstream sysdatamp("/home/humasoft/Escritorio/idsensor000response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/id000response.csv",std::ofstream::out);
 
 
     //Samplinfg time
@@ -65,7 +65,7 @@ int main (){
     ///Controller and tuning
 //    FPDBlock con(0,0,0,dts);
 //    FPDBlock con(0.15,0.03,0.75,dts);
-    FPDBlock scon(0.2547,0.7730,-0.6,dts);
+    FPDBlock scon(0.2342,0.7370,-0.59,dts);
     FPDBlock con(0.23,0.36,-0.6,dts);
 
     double wgc=3;
@@ -134,7 +134,7 @@ int main (){
             error=(psr+incli)-imuIncli;
             //        cout << "incli: " << incli << " ; imuIncli: "  << imuIncli << endl;
             //Controller command
-            cs = error > con;
+            cs = error > scon;
             m1.SetVelocity(cs);
             //update Model
 //            if(abs((cs))>0.1)

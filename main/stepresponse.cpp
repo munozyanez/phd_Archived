@@ -36,7 +36,7 @@ int main (){
     ofstream sysdataden("/home/humasoft/Escritorio/intsysden000.csv",std::ofstream::out);
     ofstream condata("/home/humasoft/Escritorio/intcon000.csv",std::ofstream::out);
     ofstream sysdatamp("/home/humasoft/Escritorio/isensor000response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/int000response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/600stepresponse.csv",std::ofstream::out);
 
 
     //Samplinfg time
@@ -65,8 +65,8 @@ int main (){
     ///Controller and tuning
 //    FPDBlock con(0,0,0,dts);
 //    FPDBlock con(0.15,0.03,0.75,dts);
-    FPDBlock scon(0.2342,0.7370,-0.59,dts);
-    FPDBlock con(0.2342,0.7370,-0.59,dts);
+    FPDBlock scon(0.2342,0.7370,-0.55,dts);
+    FPDBlock con(0.2342,0.7370,-0.55,dts);
 
     double wgc=3;
 //    FPDTuner tuner ( 100, wgc, dts);//ok second order (0,2)+integrator derivative control unstable
@@ -115,83 +115,19 @@ int main (){
     double sysk=0;
 
     con.GetParameters(kp,kd,fex);
-/*
-    //populate system matrices
-    for (double t=0;t<tinit; t+=dts)
-    {
-        psr=+5*( 1+0.5*( sin(wgc*t) + sin(10*wgc*t) ) + 0.1*(0+(rand() % 10)-5) ); //pseudorandom
-        if (imu.readSensor(imuIncli,imuOrien) <0)
-        {
-            cout << "Initializing sensor! ";
-            //Sensor error, do nothing.
-            cout << "Inc: " << imuIncli << " ; Ori: "  << imuOrien << endl;
-        }
-        else
-        {
-            filtIncliOld=filtIncli;
-            filtIncli=(imuIncli>filterSensor);
-            //Compute error
-            error=(psr+incli)-imuIncli;
-            //        cout << "incli: " << incli << " ; imuIncli: "  << imuIncli << endl;
-            //Controller command
-            cs = error > scon;
-            m1.SetVelocity(cs);
-            //update Model
-//            if(abs((cs))>0.1)
-//            if( abs(filtIncli-filtIncliOld) > 0.1)
-            {
-                model.UpdateSystem(cs, imuIncli);
-//                cout << "cs: " << cs << " ; imuIncli: "  << imuIncli << endl;
-            }
-//            model.UpdateSystem(cs, imuIncli);
-            model.GetSystemBlock(sys[0]);
-            tuner.TuneIsom(sys,con);
-        }
-        sysk=sys[0].GetZTransferFunction(num,den);
-        sys[0].GetMagnitudeAndPhase(dts,wgc,smag,sphi);
-
-        condata << t << ", " << kp << ", " << kd << ", " << fex   << endl;
-        sysdatamp << t << ", " << smag << ", " << (sphi) <<  endl;
-        timeresp << t << ", " << filtIncli << ", " << m1.GetPosition() <<  endl;
-
-        sysdatanum << t;
-        sysdatanum << ", " << num.back();
-        for (int i=num.size()-1; i>=0; i--)
-        {
-            sysdatanum << ", " << sysk*num[i];
-        }
-        sysdatanum << endl;
-
-        sysdataden << t;
-        sysdataden << ", " << den.back();
-        for (int i=den.size()-1; i>=0; i--)
-        {
-            sysdataden << ", " << den[i];
-
-        }
-        sysdataden << endl;
-        //        sysdatanum << ", " << smag << ", " << sphi;
-
-//        cout << t << ", " << kp << ", " << kd << ", " << fex   << endl;
-
-        Ts.WaitSamplingTime();
-    }
-
-*/
-
 
 
 
     //Main control loop
 
 
-    incli=10; //initial incli
+    incli=5; //initial incli
     double interval=10; //in seconds
 
-    for (long rep=0;rep<7;rep++)
+    for (long rep=0;rep<1;rep++)
     {
 
-        if (rep <4)
+        if (rep <1)
         {
             incli=incli+5;
 
@@ -206,7 +142,7 @@ int main (){
     {
 
 
-        psr=+0.2*((rand() % 10)-5); //new pseudorandom data
+        psr=+0;//.2*((rand() % 10)-5); //new pseudorandom data
 
         //    incli=incli+psr;
         //    orien=0;
