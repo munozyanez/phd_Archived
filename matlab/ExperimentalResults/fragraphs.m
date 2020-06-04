@@ -5,7 +5,7 @@ leg=[];
 
 
 for i=0:2:6
-data=csvread("data/stair/ada"+num2str(i)+"00response.csv");
+data=csvread("data/stair/fra"+num2str(i)+"00response.csv");
 data(1:800,:)=[];
 
 t=data(:,1);
@@ -25,7 +25,7 @@ N=size(t,1);
 ylabel(' Position (rad)          Inclination (deg)      ');
 xlabel('time (sec)');
 legend(leg,'Location','northwest');
-saveas(fig,'fig/adatimeResponse','epsc');
+saveas(fig,'fig/fratimeResponse','epsc');
 
 
 
@@ -34,10 +34,10 @@ saveas(fig,'fig/adatimeResponse','epsc');
 fig=figure; hold on;grid on;
 leg=[];
 for i=0:2:6
-    data=csvread("data/stair/adasysden"+num2str(i)+"00.csv");
+    data=csvread("data/stair/frasysden"+num2str(i)+"00.csv");
     data(1:800,:)=[];
 
-    data2=csvread("data/stair/adasysnum"+num2str(i)+"00.csv");
+    data2=csvread("data/stair/frasysnum"+num2str(i)+"00.csv");
     data2(1:800,:)=[];
 
     t=data(:,1);
@@ -60,7 +60,7 @@ xlabel('time (sec)');
 ylim([-1.5,1.5]);
 
 % legend(leg,'Location','northwest');
-saveas(fig,'fig/adaparameters','epsc');
+saveas(fig,'fig/fraparameters','epsc');
 
 
 
@@ -69,7 +69,7 @@ saveas(fig,'fig/adaparameters','epsc');
 fig=figure; hold on;grid on;
 leg=[];
 for i=0:2:6
-data=csvread("data/stair/adasensor"+num2str(i)+"00response.csv");
+data=csvread("data/stair/frasensor"+num2str(i)+"00response.csv");
 data(1:800,:)=[];
 
     t=data(:,1);
@@ -88,7 +88,7 @@ ylabel(' Phase (rad)          Magnitude	      ');
 xlabel('time (sec)');
 ylim([-3,3]);
 legend(leg,'Location','west');
-saveas(fig,'fig/adaphimag','epsc');
+saveas(fig,'fig/fraphimag','epsc');
 
 
 
@@ -96,7 +96,7 @@ saveas(fig,'fig/adaphimag','epsc');
 fig=figure; hold on;grid on;
 leg=[];
 for i=0:2:6
-data=csvread("data/stair/adacon"+num2str(i)+"00.csv");
+data=csvread("data/stair/fracon"+num2str(i)+"00.csv");
 data(1:800,:)=[];
 
 %     t=data(:,1);
@@ -116,7 +116,7 @@ end
 ylabel(' Controller parameters');
 xlabel('time (sec)');
 legend(leg,'Location','northwest');
-saveas(fig,'fig/adacon','epsc');
+saveas(fig,'fig/fracon','epsc');
 
 skp=mean(kp(800:N));
 ska=mean(ka(800:N));
