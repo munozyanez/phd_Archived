@@ -30,18 +30,28 @@ int main (){
     double imuIncli=0,filtIncli=0,imuOrien,filtIncliOld=0;
     SystemBlock imuFilter(0.09516,0,- 0.9048,1); //w=5
 
-    //    sleep(4); //wait for sensor
-
-    ofstream sysdatanum("/home/humasoft/Escritorio/frasysnum600.csv",std::ofstream::out);
-    ofstream sysdataden("/home/humasoft/Escritorio/frasysden600.csv",std::ofstream::out);
-    ofstream condata("/home/humasoft/Escritorio/fracon600.csv",std::ofstream::out);
-    ofstream sysdatamp("/home/humasoft/Escritorio/frasensor600response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/fra600stepresponse.csv",std::ofstream::out);
-
 
     //Samplinfg time
     double dts=0.025; //
     SamplingTime Ts(dts);
+
+    //    sleep(4); //wait for sensor
+
+    ofstream sysdatanum("/home/humasoft/Escritorio/intsysnum600.csv",std::ofstream::out);
+    ofstream sysdataden("/home/humasoft/Escritorio/intsysden600.csv",std::ofstream::out);
+    ofstream condata("/home/humasoft/Escritorio/intcon600.csv",std::ofstream::out);
+    ofstream sysdatamp("/home/humasoft/Escritorio/intsensor600response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/int600stepresponse.csv",std::ofstream::out);
+
+    ///Controller and tuning
+//    FPDBlock con(0,0,0,dts);
+//    FPDBlock con(0.15,0.03,0.75,dts);
+    FPDBlock scon(0.2084,0.8237,-0.55,dts);
+    FPDBlock con(0.2084,0.8237,-0.55,dts);
+    PIDBlock intcon(0.2084,0.8237,0,dts);
+
+
+
 
     /// System identification
     double wf=1;
@@ -57,23 +67,17 @@ int main (){
 
     vector<double> num(numOrder+1),den(denOrder+1); //(order 0 also counts)
 //    SystemBlock integral(0,1,-1,1);
-    vector<SystemBlock> sys = {SystemBlock(num,den)}; //the resulting identification
+    SystemBlock sys(num,den); //the resulting identification
 //    double sysk=0, syskAverage=0.1;
 
 
 
-    ///Controller and tuning
-//    FPDBlock con(0,0,0,dts);
-//    FPDBlock con(0.15,0.03,0.75,dts);
-    FPDBlock scon(0.2342,0.7370,-0.55,dts);
-    FPDBlock con(0.2342,0.7370,-0.55,dts);
 
     double wgc=3;
 //    FPDTuner tuner ( 100, wgc, dts);//ok second order (0,2)+integrator derivative control unstable
     FPDTuner tuner ( 50, wgc, dts);//ok second order (0,2)+integrator integral control
 
 
-    PIDBlock intcon(0.2547,0.7730,0,dts);
     //double phi,mag,w=1;
 
 
@@ -165,7 +169,7 @@ int main (){
             //        cout << "incli: " << incli << " ; imuIncli: "  << imuIncli << endl;
 
             //Controller command
-            cs = error > scon;
+            cs = error > intcon;
             m1.SetVelocity(cs);
 //            cout << "cs: " << cs << " ; error: "  << error << endl;
             //Update model
@@ -177,13 +181,13 @@ int main (){
             }
 
 //            model.GetSystemBlock(sys[0]);
-            model.GetAvgSystemBlock(sys[0]);
+            model.GetAvgSystemBlock(sys);
 //            model.PrintZTransferFunction(dts);
 
 
-            sysk=sys[0].GetZTransferFunction(num,den);
+            sysk=sys.GetZTransferFunction(num,den);
 
-            sys[0].GetMagnitudeAndPhase(dts,wgc,smag,sphi);
+            sys.GetMagnitudeAndPhase(dts,wgc,smag,sphi);
 
 
             if (sphi<0 & smag>0.1)
@@ -259,10 +263,5 @@ int main (){
 
 }
 
-
-long AdaptiveStep(double target, double time)
-{
-    return 0;
-}
 
 

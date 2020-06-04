@@ -32,11 +32,11 @@ int main (){
 
     //    sleep(4); //wait for sensor
 
-    ofstream sysdatanum("/home/humasoft/Escritorio/intsysnum000.csv",std::ofstream::out);
-    ofstream sysdataden("/home/humasoft/Escritorio/intsysden000.csv",std::ofstream::out);
-    ofstream condata("/home/humasoft/Escritorio/intcon000.csv",std::ofstream::out);
-    ofstream sysdatamp("/home/humasoft/Escritorio/isensor000response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/int000response.csv",std::ofstream::out);
+    ofstream sysdatanum("/home/humasoft/Escritorio/intsysnum200.csv",std::ofstream::out);
+    ofstream sysdataden("/home/humasoft/Escritorio/intsysden200.csv",std::ofstream::out);
+    ofstream condata("/home/humasoft/Escritorio/intcon200.csv",std::ofstream::out);
+    ofstream sysdatamp("/home/humasoft/Escritorio/intsensor200response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/int200response.csv",std::ofstream::out);
 
 
     //Samplinfg time
@@ -65,15 +65,20 @@ int main (){
     ///Controller and tuning
 //    FPDBlock con(0,0,0,dts);
 //    FPDBlock con(0.15,0.03,0.75,dts);
-    FPDBlock scon(0.2342,0.7370,-0.59,dts);
-    FPDBlock con(0.2342,0.7370,-0.59,dts);
+//    FPDBlock scon(0.2342,0.7370,-0.59,dts);
+//    FPDBlock con(0.2342,0.7370,-0.59,dts);
+//    PIDBlock intcon(0.2547,0.7730,0,dts);
+    FPDBlock scon(0.2084,0.8237,-0.55,dts);
+    FPDBlock con(0.2084,0.8237,-0.55,dts);
+    PIDBlock intcon(0.2084,0.8237,0,dts);
+
+
 
     double wgc=3;
 //    FPDTuner tuner ( 100, wgc, dts);//ok second order (0,2)+integrator derivative control unstable
     FPDTuner tuner ( 50, wgc, dts);//ok second order (0,2)+integrator integral control
 
 
-    PIDBlock intcon(0.2547,0.7730,0,dts);
     //double phi,mag,w=1;
 
 
@@ -229,7 +234,7 @@ int main (){
             //        cout << "incli: " << incli << " ; imuIncli: "  << imuIncli << endl;
 
             //Controller command
-            cs = error > scon;
+            cs = error > intcon;
             m1.SetVelocity(cs);
 //            cout << "cs: " << cs << " ; error: "  << error << endl;
             //Update model
