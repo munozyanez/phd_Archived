@@ -32,11 +32,11 @@ int main (){
 
     //    sleep(4); //wait for sensor
 
-    ofstream sysdatanum("/home/humasoft/Escritorio/intsysnum200.csv",std::ofstream::out);
-    ofstream sysdataden("/home/humasoft/Escritorio/intsysden200.csv",std::ofstream::out);
-    ofstream condata("/home/humasoft/Escritorio/intcon200.csv",std::ofstream::out);
-    ofstream sysdatamp("/home/humasoft/Escritorio/intsensor200response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/int200response.csv",std::ofstream::out);
+    ofstream sysdatanum("/home/humasoft/Escritorio/frasysnum600.csv",std::ofstream::out);
+    ofstream sysdataden("/home/humasoft/Escritorio/frasysden600.csv",std::ofstream::out);
+    ofstream condata("/home/humasoft/Escritorio/fracon600.csv",std::ofstream::out);
+    ofstream sysdatamp("/home/humasoft/Escritorio/frasensor600response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/fra600response.csv",std::ofstream::out);
 
 
     //Samplinfg time
@@ -234,7 +234,7 @@ int main (){
             //        cout << "incli: " << incli << " ; imuIncli: "  << imuIncli << endl;
 
             //Controller command
-            cs = error > intcon;
+            cs = error > scon;
             m1.SetVelocity(cs);
 //            cout << "cs: " << cs << " ; error: "  << error << endl;
             //Update model

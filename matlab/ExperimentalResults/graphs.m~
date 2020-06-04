@@ -5,7 +5,7 @@ leg=[];
 
 
 for i=0:2:6
-data=csvread("data/stair/ada"+num2str(i)+"00response.csv");
+data=csvread("../data/stair/ada"+num2str(i)+"00response.csv");
 t=data(:,1);
 d1=data(:,2);
 d2=data(:,3);
@@ -23,7 +23,7 @@ N=size(t,1);
 ylabel(' Position (rad)          Inclination (deg)      ');
 xlabel('time (sec)');
 legend(leg,'Location','northwest');
-saveas(fig,'fig/adatimeResponse','epsc');
+saveas(fig,'../adatimeResponse','epsc');
 
 
 

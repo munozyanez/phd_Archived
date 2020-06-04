@@ -49,7 +49,7 @@ plot(t,motor);
 ylabel(' Position (rad)          Inclination (deg)      ');
 xlabel('time (s)');
 legend('Neck inclination', 'Motor position','Location','best');
-saveas(fig,'fig/fratimeResponse','epsc');
+saveas(fig,'fig/frastepResponse','epsc');
 
 fig=figure; hold on;grid on;
 
@@ -85,6 +85,6 @@ plot(t,motor);
 ylabel(' Position (rad)          Inclination (deg)      ');
 xlabel('time (s)');
 legend('Neck inclination', 'Motor position','Location','best');
-saveas(fig,'fig/inttimeResponse','epsc');
+saveas(fig,'fig/intstepResponse','epsc');
 
 
