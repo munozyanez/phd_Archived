@@ -6,7 +6,6 @@ leg=[];
 
 for i=0:2:6
 data=csvread("data/stair/fra"+num2str(i)+"00response.csv");
-data(1:800,:)=[];
 
 t=data(:,1);
 d1=data(:,2);
@@ -35,10 +34,8 @@ fig=figure; hold on;grid on;
 leg=[];
 for i=0:2:6
     data=csvread("data/stair/frasysden"+num2str(i)+"00.csv");
-    data(1:800,:)=[];
 
     data2=csvread("data/stair/frasysnum"+num2str(i)+"00.csv");
-    data2(1:800,:)=[];
 
     t=data(:,1);
     d1=data(:,3);
@@ -70,7 +67,6 @@ fig=figure; hold on;grid on;
 leg=[];
 for i=0:2:6
 data=csvread("data/stair/frasensor"+num2str(i)+"00response.csv");
-data(1:800,:)=[];
 
     t=data(:,1);
     phi=data(:,3);
@@ -97,7 +93,6 @@ fig=figure; hold on;grid on;
 leg=[];
 for i=0:2:6
 data=csvread("data/stair/fracon"+num2str(i)+"00.csv");
-data(1:800,:)=[];
 
 %     t=data(:,1);
     kp=data(:,2);
