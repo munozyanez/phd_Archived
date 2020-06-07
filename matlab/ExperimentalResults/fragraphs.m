@@ -38,15 +38,15 @@ for i=0:2:6
     data2=csvread("data/stair/frasysnum"+num2str(i)+"00.csv");
 
     t=data(:,1);
-    d1=data(:,3);
-    d2=data(:,4);
-    d3=data(:,5);
+    d1=data(:,2);
+    d2=data(:,3);
+    d3=data(:,4);
 
     lc=linec(i/2+1);
     plot(t,d1,lc+'--');
     plot(t,d2,lc+'-.');
     plot(t,d3,lc);
-    n1=data2(:,3);
+    n1=data2(:,2);
     plot(t,n1,lc+':');
     leg = [leg ;"a0 "+num2str(i)+"00g";"a1 "+num2str(i)+"00g";"a2 "+num2str(i)+"00g";"b0 "+num2str(i)+"00g"];
 

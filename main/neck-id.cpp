@@ -107,7 +107,7 @@ int main (){
     model.SetParamsVector(theta);
 
     double psr; //pseudorandom
-    double tinit=300; //in seconds
+    double tinit=150; //in seconds
     double incli=5, error=0, cs=0;
 
     double kp = 0.0,kd = 0.0,fex = 0.0;
@@ -119,7 +119,7 @@ int main (){
     //populate system matrices
     for (double t=0;t<tinit; t+=dts)
     {
-        psr=+5*( 1+0.5*( sin(wgc*t) + sin(10*wgc*t) ) + 0.1*(0+(rand() % 10)-5) ); //pseudorandom
+        psr=+5*( 1+( sin(0.1*wgc*t) + sin(wgc*t) + sin(10*wgc*t) )/3 + 0.1*(0+(rand() % 10)-5) ); //pseudorandom
         if (imu.readSensor(imuIncli,imuOrien) <0)
         {
             cout << "Initializing sensor! ";
@@ -152,10 +152,10 @@ int main (){
         condata << t << ", " << kp << ", " << kd << ", " << fex   << endl;
         sysdatamp << t << ", " << smag << ", " << (sphi) <<  endl;
         timeresp << t << ", " << filtIncli << ", " << m1.GetPosition() << ", " << imuIncli ;
-        timeresp << t << ", " << cs << ", " << m1.GetVelocity()  <<  endl;
+        timeresp << ", " << cs << ", " << m1.GetVelocity()  <<  endl;
 
         sysdatanum << t;
-        sysdatanum << ", " << num.back();
+//        sysdatanum << ", " << num.back();
         for (int i=num.size()-1; i>=0; i--)
         {
             sysdatanum << ", " << sysk*num[i];
@@ -163,7 +163,7 @@ int main (){
         sysdatanum << endl;
 
         sysdataden << t;
-        sysdataden << ", " << den.back();
+//        sysdataden << ", " << den.back();
         for (int i=den.size()-1; i>=0; i--)
         {
             sysdataden << ", " << den[i];

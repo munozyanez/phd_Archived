@@ -37,11 +37,11 @@ int main (){
 
     //    sleep(4); //wait for sensor
 
-    ofstream sysdatanum("/home/humasoft/Escritorio/intsysnum600.csv",std::ofstream::out);
-    ofstream sysdataden("/home/humasoft/Escritorio/intsysden600.csv",std::ofstream::out);
-    ofstream condata("/home/humasoft/Escritorio/intcon600.csv",std::ofstream::out);
-    ofstream sysdatamp("/home/humasoft/Escritorio/intsensor600response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/int600stepresponse.csv",std::ofstream::out);
+    ofstream sysdatanum("/home/humasoft/Escritorio/frasysnum000.csv",std::ofstream::out);
+    ofstream sysdataden("/home/humasoft/Escritorio/frasysden000.csv",std::ofstream::out);
+    ofstream condata("/home/humasoft/Escritorio/fracon000.csv",std::ofstream::out);
+    ofstream sysdatamp("/home/humasoft/Escritorio/frasensor000response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/fra000stepresponse.csv",std::ofstream::out);
 
     ///Controller and tuning
 //    FPDBlock con(0,0,0,dts);
@@ -169,7 +169,7 @@ int main (){
             //        cout << "incli: " << incli << " ; imuIncli: "  << imuIncli << endl;
 
             //Controller command
-            cs = error > intcon;
+            cs = error > scon;
             m1.SetVelocity(cs);
 //            cout << "cs: " << cs << " ; error: "  << error << endl;
             //Update model
@@ -212,10 +212,11 @@ int main (){
 
         condata << t << ", " << kp << ", " << kd << ", " << fex   << endl;
         sysdatamp << t << ", " << smag << ", " << (sphi) <<  endl;
-        timeresp << t << ", " << (imuIncli>filterSensor) << ", " << m1.GetPosition() <<  endl;
+        timeresp << t << ", " << filtIncli << ", " << m1.GetPosition() << ", " << imuIncli ;
+        timeresp << ", " << cs << ", " << m1.GetVelocity()  <<  endl;
 
         sysdatanum << t;
-        sysdatanum << ", " << num.back();
+//        sysdatanum << ", " << num.back();
         for (int i=num.size()-1; i>=0; i--)
         {
             sysdatanum << ", " << sysk*num[i];
@@ -223,7 +224,7 @@ int main (){
         sysdatanum << endl;
 
         sysdataden << t;
-        sysdataden << ", " << den.back();
+//        sysdataden << ", " << den.back();
         for (int i=den.size()-1; i>=0; i--)
         {
             sysdataden << ", " << den[i];

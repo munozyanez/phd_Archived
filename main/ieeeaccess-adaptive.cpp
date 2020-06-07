@@ -32,11 +32,11 @@ int main (){
 
     //    sleep(4); //wait for sensor
 
-    ofstream sysdatanum("/home/humasoft/Escritorio/frasysnum600.csv",std::ofstream::out);
-    ofstream sysdataden("/home/humasoft/Escritorio/frasysden600.csv",std::ofstream::out);
-    ofstream condata("/home/humasoft/Escritorio/fracon600.csv",std::ofstream::out);
-    ofstream sysdatamp("/home/humasoft/Escritorio/frasensor600response.csv",std::ofstream::out);
-    ofstream timeresp("/home/humasoft/Escritorio/fra600response.csv",std::ofstream::out);
+    ofstream sysdatanum("/home/humasoft/Escritorio/frasysnum000.csv",std::ofstream::out);
+    ofstream sysdataden("/home/humasoft/Escritorio/frasysden000.csv",std::ofstream::out);
+    ofstream condata("/home/humasoft/Escritorio/fracon000.csv",std::ofstream::out);
+    ofstream sysdatamp("/home/humasoft/Escritorio/intsensor000response.csv",std::ofstream::out);
+    ofstream timeresp("/home/humasoft/Escritorio/fra000response.csv",std::ofstream::out);
 
 
     //Samplinfg time
@@ -57,7 +57,7 @@ int main (){
 
     vector<double> num(numOrder+1),den(denOrder+1); //(order 0 also counts)
 //    SystemBlock integral(0,1,-1,1);
-    vector<SystemBlock> sys = {SystemBlock(num,den)}; //the resulting identification
+    SystemBlock sys(num,den); //the resulting identification
 //    double sysk=0, syskAverage=0.1;
 
 
@@ -113,7 +113,7 @@ int main (){
 
     double psr; //pseudorandom
     double tinit=20; //in seconds
-    double incli=5, error=0, cs=0;
+    double incli=5, error=0, cs=0, csf=0;
 
     double kp = 0.0,kd = 0.0,fex = 0.0;
     double smag = 0.0,sphi = 0.0;
@@ -235,6 +235,7 @@ int main (){
 
             //Controller command
             cs = error > scon;
+            csf=cs > filterSignal;
             m1.SetVelocity(cs);
 //            cout << "cs: " << cs << " ; error: "  << error << endl;
             //Update model
@@ -246,13 +247,13 @@ int main (){
             }
 
 //            model.GetSystemBlock(sys[0]);
-            model.GetAvgSystemBlock(sys[0]);
+            model.GetAvgSystemBlock(sys);
 //            model.PrintZTransferFunction(dts);
 
 
-            sysk=sys[0].GetZTransferFunction(num,den);
+            sysk=sys.GetZTransferFunction(num,den);
 
-            sys[0].GetMagnitudeAndPhase(dts,wgc,smag,sphi);
+            sys.GetMagnitudeAndPhase(dts,wgc,smag,sphi);
 
 
             if (sphi<0 & smag>0.1)
@@ -277,10 +278,11 @@ int main (){
 
         condata << t << ", " << kp << ", " << kd << ", " << fex   << endl;
         sysdatamp << t << ", " << smag << ", " << (sphi) <<  endl;
-        timeresp << t << ", " << (imuIncli>filterSensor) << ", " << m1.GetPosition() <<  endl;
+        timeresp << t << ", " << filtIncli << ", " << csf << ", " << m1.GetPosition() ;
+        timeresp << ", " << imuIncli<< ", " << cs << ", " << m1.GetVelocity()  <<  endl;
 
         sysdatanum << t;
-        sysdatanum << ", " << num.back();
+//        sysdatanum << ", " << num.back();
         for (int i=num.size()-1; i>=0; i--)
         {
             sysdatanum << ", " << sysk*num[i];
@@ -288,7 +290,7 @@ int main (){
         sysdatanum << endl;
 
         sysdataden << t;
-        sysdataden << ", " << den.back();
+//        sysdataden << ", " << den.back();
         for (int i=den.size()-1; i>=0; i--)
         {
             sysdataden << ", " << den[i];
