@@ -115,77 +115,15 @@ fPD=minreal(tf(Cn,Cd));
 C=c2d(fPD,dts);
 
 fig=figure;hold on;
-bode(C*dsys,w);
+margin(C*dsys);
 ylim([-120-90 -120+45])
 grid on;
-saveas(fig,'fig/avgLoopBode','epsc');
+saveas(fig,'fig/fraLoopBode','epsc');
 
-% Cz_ = polyval(C.Numerator{1},z_)./polyval(C.Denominator{1},z_);
-% cbode(Cz_,w);
 
-% Cz=c2d(C,dts,'tustin');
-% Lz=c2d(minreal(lo),dts,'tustin');
-% OLz=c2d(minreal(ol),dts,'tustin');
-% %SaveCurPlotUnitsTsize(5,"isomStep","time (s)","Postion (m)");
-% s1=minreal( C*ol/(fPD*ol+1) );
-% %s1=feedback(C*L,H);
-% %z1=minreal( Cz*OLz/(Cz*Lz+1) );
-% z1=feedback(Cz*OLz,c2d(H,dts,'tustin'));
-% %z1=c2d(s1,dts,'tustin')
-
-% close all;
 dg=0.2;ng=2;
 
-% figure;hold on;
-% l1=[];
-% for g=1:dg:1+dg*ng
-%     bode(C*g*system,{wsp/10 wsp*10});
-%     l1=[l1; ['loop gain * ' num2str(g,'%.2f')]];
-%     bode(C*system/g,{wsp/10 wsp*10});
-%     l1=[l1; ['loop gain / ' num2str(g,'%.2f')]];
-% 
-% end
-% grid on;
-% legend(l1);
-
-% figure;hold on;
-% l1=[];
-% for g=1:dg:1+dg*ng
-%     bode(minreal ( feedback(C*system*g,H) ),{wsp/10 wsp*10});
-%     l1=[l1; ['loop gain * ' num2str(g,'%.2f')]];
-%     bode(minreal ( feedback(C*system/g,H) ),{wsp/10 wsp*10});   
-%     l1=[l1; ['loop gain / ' num2str(g,'%.2f')]];
-% 
-% end
-% grid on;
-% legend(l1);
-
-
-% figure;hold on;
-% l1=[];
-% for g=1:dg:1+dg*ng
-%     bode(minreal ( feedback(C*system*g,H)*H ),{wsp/10 wsp*10});
-%     l1=[l1; ['loop gain * ' num2str(g,'%.2f')]];
-%     bode(minreal ( feedback(C*system/g,H)*H ),{wsp/10 wsp*10});   
-%     l1=[l1; ['loop gain / ' num2str(g,'%.2f')]];
-% 
-% end
-% grid on;
-% legend(l1);
-
-% figure;hold on;
-% tstep=20/sqrt(wsp);
-% %dg=0.2;ng=3;
-% l1=[];
-% for g=1:dg:1+dg*ng
-%     step(feedback(C*g*ol,H)*H,tstep);
-%     l1=[l1; ['loop gain * ' num2str(g,'%.2f')]];
-%     step(feedback(C*ol/g,H)*H,tstep);
-%     l1=[l1; ['loop gain / ' num2str(g,'%.2f')]];
-% 
-% end
-% grid on;
-% legend(l1);
+% figure;hold on
 
 
 fig=figure;hold on;
@@ -204,7 +142,42 @@ end
 grid on;
 Leg=legend(l1);
 
-saveas(fig,'fig/avgtimeResps','epsc');
+saveas(fig,'fig/fratimeResps','epsc');
+
+
+%PI comparision
+
+C=c2d(kp+ka/s,dts);
+
+fig=figure;hold on;
+margin(C*dsys);
+ylim([-120-90 -120+45])
+grid on;
+saveas(fig,'fig/PILoopBode','epsc');
+
+
+dg=0.2;ng=2;
+
+% figure;hold on
+
+
+fig=figure;hold on;
+tstep=20/sqrt(wgc);
+% t=0:Ts:tstep;
+% lsim(H,ones(size(t)),t)
+%dg=0.2;ng=3;
+l1=[];
+for g=1:dg:1+dg*ng
+    step(feedback(C*dsys*g,1),tstep);
+    l1=[l1; ['loop gain * ' num2str(g,'%.2f')]];
+    step(feedback(C*dsys/g,1),tstep);
+    l1=[l1; ['loop gain / ' num2str(g,'%.2f')]];
+
+end
+grid on;
+Leg=legend(l1);
+
+saveas(fig,'fig/PItimeResps','epsc');
 
 
 

@@ -1,90 +1,51 @@
+
 clear;close all;
-% data=csvread("data/id000response.csv")
-% t=data(:,1);
-% incli=data(:,2);
-% motor=data(:,3);
-% 
-% 
-% fig=figure; hold on;grid on;
-% 
-% plot(t,incli);
-% plot(t,motor);
-% 
-% ylabel(' Position (rad)          Inclination (deg)      ');
-% xlabel('time (s)');
-% legend('Neck inclination', 'Motor position','Location','best');
-% saveas(fig,'fig/avgtimeResponse','epsc');
+
+leg=[];
+linec=["k";"r";"g";"b"];
 
 fig=figure; hold on;grid on;
 
+for i=0:2:6
+data=csvread("data/step/fra"+num2str(i)+"00stepresponse.csv");
 
-data=csvread("data/step/fra000stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
+    t=data(:,1);
+    incli=data(:,2);
+    motor=data(:,3);
 
-data=csvread("data/step/fra200stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
+    lc=linec(i/2+1);
+    plot(t,incli,lc);
+    plot(t,motor,lc+'--');
+    leg = [leg ;"Neck "+num2str(i)+"00g";"Motor "+num2str(i)+"00g"];
 
-data=csvread("data/step/fra400stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
+end
 
-data=csvread("data/step/fra600stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
-
-ylabel(' Position (rad)          Inclination (deg)      ');
-xlabel('time (s)');
-legend('Neck inclination', 'Motor position','Location','best');
+ylabel(' Motor position (rad)         Neck inclination (deg)        ');
+xlabel('time (sec)');
+legend(leg,'Location','best','NumColumns',2);
 saveas(fig,'fig/frastepResponse','epsc');
 
+
 fig=figure; hold on;grid on;
 
+for i=0:2:6
+data=csvread("data/step/int"+num2str(i)+"00stepresponse.csv");
 
-data=csvread("data/step/int000stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
+    t=data(:,1);
+    incli=data(:,2);
+    motor=data(:,3);
 
-data=csvread("data/step/int200stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
+    lc=linec(i/2+1);
+    plot(t,incli,lc);
+    plot(t,motor,lc+'--');
+    % legend('Neck inclination', 'Motor position','Location','best');
 
-data=csvread("data/step/int400stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
+    leg = [leg ;"Neck "+num2str(i)+"00g";"Motor "+num2str(i)+"00g"];
 
-data=csvread("data/step/int600stepresponse.csv")
-t=data(:,1);
-incli=data(:,2);
-motor=data(:,3);
-plot(t,incli);
-plot(t,motor);
+end
 
-ylabel(' Position (rad)          Inclination (deg)      ');
-xlabel('time (s)');
-legend('Neck inclination', 'Motor position','Location','best');
+ylabel(' Motor position (rad)         Neck inclination (deg)        ');
+xlabel('time (sec)');
+legend(leg,'Location','best','NumColumns',2);
 saveas(fig,'fig/intstepResponse','epsc');
-
 

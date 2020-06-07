@@ -4,8 +4,25 @@ dts=0.02;
 z=tf('z',0.02);
 s=tf('s');
 
-datan=csvread("data/frasysnum200.csv");
-datad=csvread("data/frasysden200.csv");
+data=csvread("data/id/id000response.csv");
+t=data(:,1);
+
+fig=figure; hold on;
+plot(t,data(:,3));
+
+plot(t,data(:,2));
+title("Identification data ");
+ylabel('    Input (rad/s)           Output (deg)');
+xlabel('time (sec)');
+legend("System input","System output",'Location','best');
+% ylim([-1.5 1.5]);
+saveas(fig,'fig/idexperiment','epsc');
+
+
+% datan=csvread("data/frasysnum200.csv");
+% datad=csvread("data/frasysden200.csv");
+datan=csvread("data/id/sysnum000.csv");
+datad=csvread("data/id/sysden000.csv");
 
 N=size(datan,2);
 M=size(datad,2);

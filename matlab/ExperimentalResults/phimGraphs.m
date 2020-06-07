@@ -1,4 +1,4 @@
-data=csvread("data/sensor000response.csv")
+data=csvread("data/id/sensor000response.csv")
 t=data(:,1);
 mag=data(:,2);
 phi=data(:,3);
