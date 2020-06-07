@@ -151,7 +151,8 @@ int main (){
 
         condata << t << ", " << kp << ", " << kd << ", " << fex   << endl;
         sysdatamp << t << ", " << smag << ", " << (sphi) <<  endl;
-        timeresp << t << ", " << filtIncli << ", " << m1.GetPosition() <<  endl;
+        timeresp << t << ", " << filtIncli << ", " << m1.GetPosition() << ", " << imuIncli ;
+        timeresp << t << ", " << cs << ", " << m1.GetVelocity()  <<  endl;
 
         sysdatanum << t;
         sysdatanum << ", " << num.back();
