@@ -10,13 +10,22 @@ t=data(:,1);
 fig=figure; hold on;grid on;
 plot(t,data(:,5));
 
-plot(t,data(:,4));
-title("Identification data ");
-ylabel('    Input (rad/s)           Output (deg)');
+title("Plant input");
+ylabel('Motor velocity (rad/s)');
 xlabel('time (sec)');
-legend("System input","System output",'Location','best');
+% legend("System input","System output",'Location','best');
 % ylim([-1.5 1.5]);
-saveas(fig,'fig/idexperiment','epsc');
+saveas(fig,'fig/idinput','epsc');
+
+fig=figure; hold on;grid on;
+
+plot(t,data(:,4));
+title("Plant output");
+ylabel('Neck inclination (deg)');
+xlabel('time (sec)');
+% legend("System input","System output",'Location','best');
+% ylim([-1.5 1.5]);
+saveas(fig,'fig/idoutput','epsc');
 
 
 % datan=csvread("data/frasysnum200.csv");
@@ -49,10 +58,10 @@ end
 
 
 fig=figure;hold on;grid on;
-plot(t,real(poles)');
+plot(t,poles');
 plot(t,datan(:,2:N));
 
-ylabel('Roots and gain of model');
+ylabel('Model poles and gain');
 xlabel('time (sec)');
 legend('Pole 1', 'Pole 2', 'Gain','Location','best');
 ylim([-1.5 1.5]);

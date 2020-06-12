@@ -6,7 +6,7 @@ z=tf('z',dts);
 %This file tunes a fractional controller based on the following:
 %%%%%%%%%%%% controller specification
 wgc=3;pm=50;Ts=dts;caso=1; %
-dsys=0.07884/ ( z^2 - 1.198 *z + 0.1981);
+dsys=0.08207/ ( z^2 - 1.184 *z + 0.184);
 %%%%%%%%%%%
 
 %jw array
@@ -140,7 +140,7 @@ for g=1:dg:1+dg*ng
 
 end
 grid on;
-Leg=legend(l1);
+legend(l1, 'Location','east');
 
 saveas(fig,'fig/fratimeResps','epsc');
 
@@ -175,7 +175,7 @@ for g=1:dg:1+dg*ng
 
 end
 grid on;
-Leg=legend(l1);
+Leg=legend(l1, 'Location','southeast');
 
 saveas(fig,'fig/PItimeResps','epsc');
 

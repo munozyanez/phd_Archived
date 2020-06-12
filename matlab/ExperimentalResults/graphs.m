@@ -1,12 +1,13 @@
 clear; close all;
 
 fig=figure; hold on;grid on;
+fig2=figure; hold on;grid on;
 leg=[];
 linec=["k";"r";"g";"b"];
 
+
 for i=0:2:6
 data=csvread("data/stair/ada"+num2str(i)+"00response.csv");
-% data(1:800,:)=[];
 
 t=data(:,1);
 d1=data(:,2);
@@ -14,18 +15,26 @@ d2=data(:,3);
 
 
 lc=linec(i/2+1);
+figure(fig);
 p1=plot(t,d1,lc);
-p2=plot(t,d2,lc+'--');
-leg = [leg ;"Neck "+num2str(i)+"00g";"Motor "+num2str(i)+"00g"];
+figure(fig2);
+p2=plot(t,d2,lc);%+'--');
+leg = [leg ;"Payload "+num2str(i)+"00g"];
 
 end
-
 N=size(t,1);
-ylabel(' Motor position (rad)         Neck inclination (deg)        ');
+
+figure(fig);
+ylabel('Neck inclination (deg)');
 xlabel('time (sec)');
-legend(leg,'Location','best','NumColumns',1);
+legend(leg,'Location','best');
 saveas(fig,'fig/adastairResponse','epsc');
 
+figure(fig2);
+ylabel('Control signal (rad/s)');
+xlabel('time (sec)');
+legend(leg,'Location','best');
+saveas(fig,'fig/adastairControl','epsc');
 
 
 
@@ -41,17 +50,17 @@ for i=0:2:6
 
 
     t=data(:,1);
-    d1=data(:,2);
-    d2=data(:,3);
-    d3=data(:,4);
+    d1=data(:,3);
+    d2=data(:,4);
+    d3=data(:,5);
 
     lc=linec(i/2+1);
     plot(t,d1,lc+'--');
     plot(t,d2,lc+'-.');
     plot(t,d3,lc);
-    n1=data2(:,2);
+    n1=data2(:,3);
     plot(t,n1,lc+':');
-    leg = [leg ;"a0 "+num2str(i)+"00g";"a1 "+num2str(i)+"00g";"a2 "+num2str(i)+"00g";"b0 "+num2str(i)+"00g"];
+    leg = [leg ;"a2 "+num2str(i)+"00g";"a1 "+num2str(i)+"00g";"a0 "+num2str(i)+"00g";"b0 "+num2str(i)+"00g"];
 
     
     
@@ -93,7 +102,7 @@ for i=0:2:6
     
 end
 
-ylabel('Roots and gain of model');
+ylabel('Model poles and gain');
 xlabel('time (sec)');
 ylim([0,1.1]);
 legend(leg,'NumColumns',4,'Location','best');
