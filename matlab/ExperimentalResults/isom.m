@@ -115,8 +115,10 @@ fPD=minreal(tf(Cn,Cd));
 C=c2d(fPD,dts);
 
 fig=figure;hold on;
-margin(C*dsys);
-ylim([-120-90 -120+45])
+% margin(minreal(C*dsys));
+cbode(cs,w);
+xlim([10^-2 10^2]);
+% ylim([-120-90 -120+45])
 grid on;
 saveas(fig,'fig/fraLoopBode','epsc');
 
@@ -151,6 +153,7 @@ C=c2d(kp+ka/s,dts);
 
 fig=figure;hold on;
 margin(C*dsys);
+xlim([10^-2 10^2]);
 ylim([-120-90 -120+45])
 grid on;
 saveas(fig,'fig/PILoopBode','epsc');
@@ -185,7 +188,6 @@ function y = cbode(cfresp,freq)
     
 % Magnitude
 m = 20 * log10(abs(cfresp));
-
 % Phase
 phase = mod(angle(cfresp)*180/pi, -360);
 %phase = angle(cfresp)*180/pi;
@@ -196,14 +198,15 @@ ycenter = mod(angle( cfresp(Nc) )*180/pi, -360);
 % Plot
 subplot(2,1,1)
 semilogx(freq,m);
-grid on
-ylabel('Magnitude (dB)');
+grid on;
+title("Bode Diagram",'FontSize',12);
+ylabel('Magnitude (dB)','FontSize',12);
 
 subplot(2,1,2)
 semilogx(freq,phase);
 grid on
-ylabel('Phase (deg)');
-xlabel('Frequency (rad/sec)');
+ylabel('Phase (deg)','FontSize',12);
+xlabel('Frequency (rad/sec)','FontSize',12);
 ylim([ycenter-90 ycenter+45])
 %yticks([0 0.5 0.8 1])
 y=0;

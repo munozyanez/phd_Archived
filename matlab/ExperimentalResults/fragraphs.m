@@ -34,7 +34,44 @@ figure(fig2);
 ylabel('Control signal (rad/s)');
 xlabel('time (sec)');
 legend(leg,'Location','best');
-saveas(fig,'fig/frastairControl','epsc');
+saveas(fig2,'fig/frastairControl','epsc');
+
+
+
+
+fig=figure; hold on;grid on;
+leg=[];
+for i=0:2:6
+    data=csvread("data/stair/frasysden"+num2str(i)+"00.csv");
+%     data(1:800,:)=[];
+
+    data2=csvread("data/stair/frasysnum"+num2str(i)+"00.csv");
+%     data2(1:800,:)=[];
+
+%     t=data(:,1);
+
+    poles=[];
+    M=size(data,2);
+    SZ=size(data,1);
+    for j=1:SZ
+    poles=[poles, roots(data(j,2:M))]; %#ok<*AGROW>
+    end
+    
+    lc=linec(i/2+1);
+    plot(t,real(poles)',lc+':');
+    plot(t,data2(:,2),lc);
+
+    leg = [leg ;"z_1 "+num2str(i)+"00g";"z_2 "+num2str(i)+"00g";"k "+num2str(i)+"00g"];
+
+    
+    
+end
+
+ylabel('Model poles and gain');
+xlabel('time (sec)');
+ylim([0,1.1]);
+legend(leg,'NumColumns',4,'Location','best');
+saveas(fig,'fig/frastairzpk','epsc');
 
 
 

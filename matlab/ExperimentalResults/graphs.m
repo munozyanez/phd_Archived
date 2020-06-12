@@ -34,7 +34,7 @@ figure(fig2);
 ylabel('Control signal (rad/s)');
 xlabel('time (sec)');
 legend(leg,'Location','best');
-saveas(fig,'fig/adastairControl','epsc');
+saveas(fig2,'fig/adastairControl','epsc');
 
 
 
